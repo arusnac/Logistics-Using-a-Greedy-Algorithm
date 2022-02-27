@@ -1,5 +1,5 @@
 class HashTable(object):
-    def __init__(self, length=4):
+    def __init__(self, length=124):
         self.array = [None] * length
 
     def hash(self, key):
@@ -30,3 +30,13 @@ class HashTable(object):
                     return kvp[1]
 
             raise KeyError()
+
+
+    def is_full(self):
+        items = 0
+
+        for item in self.array:
+            if item is not None:
+                items +=1
+
+        return items > len(self.array)/2
