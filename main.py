@@ -23,6 +23,7 @@ for row in csvreader:
 test_route = []
 i = 1
 
+
 while i < 10:
     index = str(i)
     address = hash.get(index)
@@ -75,30 +76,59 @@ g = WGraph()
 for n in nRow:
     g.add_vertex(n[1])
 
-x=0
-while x < len(nRow):
-    for i in nRow:
-        g.add_edge(nRow[x][1], i[1], i[x+2])
-    x += 1
-    #s+=1
+n = 0
+s = 2
+while n < len(nRow):
+    g.add_edge(nRow[0][1], nRow[n][1], nRow[n][2])
+    g.add_edge(nRow[1][1], nRow[n][1], nRow[n][3])
+    g.add_edge(nRow[2][1], nRow[n][1], nRow[n][4])
+    g.add_edge(nRow[3][1], nRow[n][1], nRow[n][5])
+    g.add_edge(nRow[4][1], nRow[n][1], nRow[n][6])
+    g.add_edge(nRow[5][1], nRow[n][1], nRow[n][7])
+    g.add_edge(nRow[6][1], nRow[n][1], nRow[n][8])
+    g.add_edge(nRow[7][1], nRow[n][1], nRow[n][9])
+    g.add_edge(nRow[8][1], nRow[n][1], nRow[n][10])
+    g.add_edge(nRow[9][1], nRow[n][1], nRow[n][11])
+    g.add_edge(nRow[10][1], nRow[n][1], nRow[n][12])
+    g.add_edge(nRow[11][1], nRow[n][1], nRow[n][13])
+    g.add_edge(nRow[12][1], nRow[n][1], nRow[n][14])
+    g.add_edge(nRow[13][1], nRow[n][1], nRow[n][15])
+    g.add_edge(nRow[14][1], nRow[n][1], nRow[n][16])
+    g.add_edge(nRow[15][1], nRow[n][1], nRow[n][17])
+    g.add_edge(nRow[16][1], nRow[n][1], nRow[n][18])
+    g.add_edge(nRow[17][1], nRow[n][1], nRow[n][19])
+    g.add_edge(nRow[18][1], nRow[n][1], nRow[n][20])
+    g.add_edge(nRow[19][1], nRow[n][1], nRow[n][21])
+    g.add_edge(nRow[20][1], nRow[n][1], nRow[n][22])
+    g.add_edge(nRow[21][1], nRow[n][1], nRow[n][23])
+    g.add_edge(nRow[22][1], nRow[n][1], nRow[n][24])
+    g.add_edge(nRow[23][1], nRow[n][1], nRow[n][25])
+    g.add_edge(nRow[24][1], nRow[n][1], nRow[n][26])
+    g.add_edge(nRow[25][1], nRow[n][1], nRow[n][27])
+    g.add_edge(nRow[26][1], nRow[n][1], nRow[n][28])
 
+    n+=1
 
+"""
 for v in g:
     for w in v.get_connections():
         vid = v.get_id()
         wid = w.get_id()
         print(vid, wid, v.get_weight(w))
 """
+"""
 for v in g:
     print(v.get_id(), g.vert_dict[v.get_id()])
 """
+test_dict = {}
+i = 0
+print(test_route)
+while i < len(test_route):
+    print(g.get_vertex(test_route[i]).get_weight(g.get_vertex(test_route[i+1])))
+    i+=1
 
+print(g.get_vertex(nRow[0][1]).get_weight(g.get_vertex(nRow[26][1])))
 
-# for i in nRow:
-# add_edge(nRow[1][1], i[1], i[2])
-
-# print_graph()
-# add_edge(nRow[n][1], nRow[n][1], )
 
 while n < len(nodes):
     start[nRow[0][1]][nRow[n][1]] = nRow[n][2]
@@ -138,11 +168,8 @@ while n < len(nodes):
 # print(start)
 newGraph = Graph(nodes, start)
 newStart = {}
-newStart[nRow[1][0]][nRow[n][1]] = nRow[n][28]
-while i < 8:
-    for i in test_route:
-        if i in start.keys():
-            print(start[i][i])
+#newStart[nRow[1][0]][nRow[n][1]] = nRow[n][28]
+
 
 # print(newGraph.value(nRow[15][0], nRow[10][0]))
 # print(nRow[15][0])
@@ -151,7 +178,7 @@ end = test_route[8]
 prev, route = algo.dijkstra_algorithm(newGraph, test_route, start_node=nRow[0][1])
 # algo.print_result(prev, route, start_node=nRow[0][1], target_node=test_route[-2])
 print(prev)
-algo.print_result(prev, route, start_node=nRow[0][1], target_node=end)
+#algo.print_result(prev, route, start_node=nRow[0][1], target_node=end)
 # print(newGraph.get_edges(nRow[0][0]))
 # newGraph.create_graph()
 

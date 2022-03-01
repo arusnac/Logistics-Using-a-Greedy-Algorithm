@@ -1,5 +1,5 @@
 class HashTable(object):
-    def __init__(self, length=3124):
+    def __init__(self, length=60):
         self.array = [None] * length
 
     def hash(self, key):
