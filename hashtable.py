@@ -1,5 +1,5 @@
 class HashTable(object):
-    def __init__(self, length=124):
+    def __init__(self, length=3124):
         self.array = [None] * length
 
     def hash(self, key):
@@ -40,3 +40,13 @@ class HashTable(object):
                 items +=1
 
         return items > len(self.array)/2
+
+    def __setitem__(self, key, value):
+        self.add(key, value)
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def printItems(self):
+        for i in self.array:
+            print(i)

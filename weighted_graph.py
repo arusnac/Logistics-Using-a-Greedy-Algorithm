@@ -1,15 +1,37 @@
+import csv
+
+
 class Graph:
-    def __init__(self, nodes, edges):
-        self.adjacency = [None] * node
+    def __init__(self, nodes, start):
+        self.nodes = nodes
+        self.graph = self.create_graph(nodes, start)
 
-        for n in range(nodes):
-            self.adjacency[n] = []
+    def create_graph(self, nodes, start):
+        graph = {}
+        for n in nodes:
+            graph[n] = {}
 
-        for(start, dest, distance) in edges:
-            self.adjacency[start].append((dest, distance))
+        graph.update(start)
 
-    def PrintGraph(graph):
-        for start in range(len(graph.adjacency)):
-            for (dest, distance) in graph.adjacency[start]:
-                print(f'({start}->{dest}, {distance})')
-            print()
+        for node, edges in graph.items():
+            for adjacent_node, value in edges.items():
+                if not graph[adjacent_node].get(node, False):
+                    graph[adjacent_node][node] = value
+        return graph
+
+    def get_nodes(self):
+        return self.nodes
+
+    def get_edges(self, node):
+        conn = []
+        for out in self.nodes:
+            if self.graph[node].get(out, False):
+                conn.append(out)
+        return conn
+
+    def value(self, node1, node2):
+        return float(self.graph[node1][node2])
+
+
+
+
