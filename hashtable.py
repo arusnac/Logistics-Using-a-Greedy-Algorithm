@@ -1,52 +1,60 @@
 class HashTable(object):
-    def __init__(self, length=3124):
-        self.array = [None] * length
+    def __init__(self, size=80):
+        self.array = [None] * size
 
-    def hash(self, key):
-        """get index of array for specific key"""
+    def create_hash(self, key):
         length = len(self.array)
         return hash(key) % length
 
+    def print_items(self):
+        for i in self.array:
+            print(i)
+
+    def get_all_items(self):
+        for item in self.array:
+            return item
+
+    def get_by_key(self, key):
+        index = self.create_hash(key)
+        #if self.array[index] is None:
+            #raise KeyError()
+        #else:
+        for item in self.array[index]:
+            if item[0] == key:
+                return item[1]
+
+            #raise KeyError()
+
     def insert(self, key, value):
-        index = self.hash(key)
-        if self.array[index] is not None:
-            for kvp in self.array[index]:
-                if kvp[0] == key:
-                    kvp[1] = value
+        i = self.create_hash(key)
+        if self.array[i] is not None:
+            for item in self.array[i]:
+                if item[0] == key:
+                    item[1] = value
                     break
                 else:
-                    self.array[index].append([key, value])
+                    self.array[i].append([key, value])
         else:
-            self.array[index] = []
-            self.array[index].append([key, value])
+            self.array[i] = []
+            self.array[i].append([key, value])
 
-    def get(self, key):
-        index = self.hash(key)
-        if self.array[index] is None:
-            raise KeyError()
-        else:
-            for kvp in self.array[index]:
-                if kvp[0] == key:
-                    return kvp[1]
-
-            raise KeyError()
-
+        self.is_full()
 
     def is_full(self):
         items = 0
 
         for item in self.array:
             if item is not None:
-                items +=1
+                items += 1
 
-        return items > len(self.array)/2
+        if items > len(self.array)/2:
+            size = 120
 
-    def __setitem__(self, key, value):
-        self.add(key, value)
 
-    def __getitem__(self, key):
-        return self.get(key)
+    #def __setitem__(self, key, value):
+        #self.add(key, value)
 
-    def printItems(self):
-        for i in self.array:
-            print(i)
+    #def __getitem__(self, key):
+        #return self.get(key)
+
+

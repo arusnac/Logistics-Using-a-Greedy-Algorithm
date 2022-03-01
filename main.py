@@ -1,11 +1,14 @@
 import algo
+import algorithm
 import hashtable
 import csv
 
-# from weighted_graph import Graph
-from vertex import WGraph
+import truck
+from algorithm import greedy
+from nodes import Weighted_Graph
 from weighted_graph import Graph
 
+truck.prep_trucks()
 
 hashtable.HashTable
 
@@ -23,9 +26,10 @@ for row in csvreader:
 test_route = []
 i = 1
 
-while i < 10:
+
+while i < 18:
     index = str(i)
-    address = hash.get(index)
+    address = hash.get_by_key(index)
     address = address[1] + " (" + address[4] + ")"
     test_route.append(address)
     i += 1
@@ -70,36 +74,83 @@ for node in nodes:
     start[node] = {}
 
 
-g = WGraph()
+g = Weighted_Graph()
 
 for n in nRow:
-    g.add_vertex(n[1])
+    g.add_node(n[1])
 
-x=0
-while x < len(nRow):
-    for i in nRow:
-        g.add_edge(nRow[x][1], i[1], i[x+2])
-    x += 1
-    #s+=1
+n = 0
+s = 2
+while n < len(nRow):
+    g.add_edge(nRow[0][1], nRow[n][1], nRow[n][2])
+    g.add_edge(nRow[1][1], nRow[n][1], nRow[n][3])
+    g.add_edge(nRow[2][1], nRow[n][1], nRow[n][4])
+    g.add_edge(nRow[3][1], nRow[n][1], nRow[n][5])
+    g.add_edge(nRow[4][1], nRow[n][1], nRow[n][6])
+    g.add_edge(nRow[5][1], nRow[n][1], nRow[n][7])
+    g.add_edge(nRow[6][1], nRow[n][1], nRow[n][8])
+    g.add_edge(nRow[7][1], nRow[n][1], nRow[n][9])
+    g.add_edge(nRow[8][1], nRow[n][1], nRow[n][10])
+    g.add_edge(nRow[9][1], nRow[n][1], nRow[n][11])
+    g.add_edge(nRow[10][1], nRow[n][1], nRow[n][12])
+    g.add_edge(nRow[11][1], nRow[n][1], nRow[n][13])
+    g.add_edge(nRow[12][1], nRow[n][1], nRow[n][14])
+    g.add_edge(nRow[13][1], nRow[n][1], nRow[n][15])
+    g.add_edge(nRow[14][1], nRow[n][1], nRow[n][16])
+    g.add_edge(nRow[15][1], nRow[n][1], nRow[n][17])
+    g.add_edge(nRow[16][1], nRow[n][1], nRow[n][18])
+    g.add_edge(nRow[17][1], nRow[n][1], nRow[n][19])
+    g.add_edge(nRow[18][1], nRow[n][1], nRow[n][20])
+    g.add_edge(nRow[19][1], nRow[n][1], nRow[n][21])
+    g.add_edge(nRow[20][1], nRow[n][1], nRow[n][22])
+    g.add_edge(nRow[21][1], nRow[n][1], nRow[n][23])
+    g.add_edge(nRow[22][1], nRow[n][1], nRow[n][24])
+    g.add_edge(nRow[23][1], nRow[n][1], nRow[n][25])
+    g.add_edge(nRow[24][1], nRow[n][1], nRow[n][26])
+    g.add_edge(nRow[25][1], nRow[n][1], nRow[n][27])
+    g.add_edge(nRow[26][1], nRow[n][1], nRow[n][28])
+
+    n+=1
 
 
-for v in g:
-    for w in v.get_connections():
-        vid = v.get_id()
-        wid = w.get_id()
-        print(vid, wid, v.get_weight(w))
 """
 for v in g:
     print(v.get_id(), g.vert_dict[v.get_id()])
 """
+test_dict = {}
+
+r = Weighted_Graph()
+
+for n in test_route:
+    r.add_node(n)
 
 
-# for i in nRow:
-# add_edge(nRow[1][1], i[1], i[2])
+n = 0
+while n < len(test_route):
+    for i in test_route:
+        if i is not test_route[n]:
+            r.add_edge(test_route[n], i, g.get_node(test_route[n]).get_weight(g.get_node(i)))
+        #r.add_edge(test_route[i], test_route[i+1], g.get_vertex(test_route[i]).get_weight(g.get_vertex(test_route[i+1])))
+    n+=1
 
-# print_graph()
-# add_edge(nRow[n][1], nRow[n][1], )
+"""
+for v in r:
+    for w in v.get_neighbors():
+        vid = v.get_id()
+        wid = w.get_id()
+        print(vid, wid, v.get_weight(w))
+"""
+"""
+print(r.get_node(test_route[0]))
+print(r.get_weight_by_v(test_route[0], test_route[1]))
+"""
+#print(r.get_node(test_route[0]))
+#print(test_route)
+#prev, route = greedy(r)
+#print(route)
+#algorithm.print_result(prev, route, start_node = 'HUB', target_node='3060 Lester St (84119)')
 
+n = 0
 while n < len(nodes):
     start[nRow[0][1]][nRow[n][1]] = nRow[n][2]
     start[nRow[1][1]][nRow[n][1]] = nRow[n][3]
@@ -131,6 +182,7 @@ while n < len(nodes):
 
     n += 1
 
+
 # start["test3"]["test4"] = nRow[1][2]
 # start[tHeader[3]][nRow[1][1]] = nRow[1][2]
 # start[tHeader[4], nRow[2][1]] = nRow[2][2]
@@ -138,20 +190,17 @@ while n < len(nodes):
 # print(start)
 newGraph = Graph(nodes, start)
 newStart = {}
-newStart[nRow[1][0]][nRow[n][1]] = nRow[n][28]
-while i < 8:
-    for i in test_route:
-        if i in start.keys():
-            print(start[i][i])
+#newStart[nRow[1][0]][nRow[n][1]] = nRow[n][28]
+
 
 # print(newGraph.value(nRow[15][0], nRow[10][0]))
 # print(nRow[15][0])
 # print(newGraph.value(nRow[15][0], nRow[25][0]))
 end = test_route[8]
-prev, route = algo.dijkstra_algorithm(newGraph, test_route, start_node=nRow[0][1])
+#prev, route = algo.dijkstra_algorithm(newGraph, test_route, start_node=nRow[0][1])
 # algo.print_result(prev, route, start_node=nRow[0][1], target_node=test_route[-2])
-print(prev)
-algo.print_result(prev, route, start_node=nRow[0][1], target_node=end)
+#print(prev)
+#algo.print_result(prev, route, start_node=nRow[0][1], target_node=end)
 # print(newGraph.get_edges(nRow[0][0]))
 # newGraph.create_graph()
 
