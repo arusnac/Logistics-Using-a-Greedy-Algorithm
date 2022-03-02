@@ -60,6 +60,7 @@ def prep_trucks():
     for row in csvreader:
         hash.insert(row[0], row)
     all_packages = []
+    hash.update_status('1', 'mes')
 
     i = 1
     while i < 41:
@@ -123,8 +124,8 @@ def prep_trucks():
     formatted = format(truck_1.get_packages())
     dist, returned_route = nodes.load_graph(to_sort=formatted)
     truck_1.set_miles(dist)
-
-    #calculate_time(returned_route)
+    #print(formatted)
+    calculate_time(returned_route, dist)
     #testalgo.greedy()
     #formatted = format(truck_3.get_packages())
     #dist = nodes.load_graph(to_sort=formatted)
@@ -157,36 +158,23 @@ def prep_trucks():
         i += 1
     """
 
-def calculate_time(returned_route):
+def calculate_time(returned_route, distances):
     truck2_start = timedelta(hours = 8, minutes=0)
-    speed = 18
+
     print(truck2_start)
-    route = []
-    distance = []
-    for i in returned_route:
-        route.append(i)
-        distance.append(returned_route[i])
+
+
     current_time = truck2_start
-    distance.sort()
+
     delivered = []
     i=0
-    while i < len(route):
-        if i == 0:
-            minutes_to_add = distance[i]/18 *60
-        else:
-            minutes_to_add = ((distance[i]-distance[i-1])/18)*60
-        #print(minutes_to_add)
+    while i < len(distances):
+        minutes_to_add = ((distances[i])/18)*60
         time_add = timedelta(minutes=minutes_to_add)
         current_time += time_add
-        #print(current_time)
+        print(current_time)
         i+=1
-    #print(distance)
-    #time_add = timedelta(minutes=8)
-    #current_time = truck2_start + time_add
-    #print(current_time)
 
-    #print(route)
-    #print(distance)
 
 def format(packages):
     format_for_graph = []

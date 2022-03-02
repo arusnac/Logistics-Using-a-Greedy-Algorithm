@@ -38,7 +38,7 @@ def dijkstra_algorithm(graph, truck_route, start_node):
             if tentative_value < route[item]:
                 route[item] = tentative_value
                 # We also update the best path to the current node
-                print(current_node)
+                #print(current_node)
                 previous_nodes[item] = current_node
         #print(current_node)
             # After visiting its neighbors, we mark the node as "visited"

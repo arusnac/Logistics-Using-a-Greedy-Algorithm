@@ -65,6 +65,8 @@ class Nodes:
 
     def set_previous(self, prev):
         self.previous = prev
+    def get_previous(self):
+        return self.previous
 
     def set_visited(self):
         self.visited = True
@@ -128,7 +130,7 @@ def load_graph(to_sort):
 
 
     r = Weighted_Graph()
-    to_sort.append('HUB')
+    to_sort.insert(0, 'HUB')
     #print(to_sort)
     for n in to_sort:
         r.add_node(n)
