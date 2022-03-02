@@ -60,7 +60,6 @@ def prep_trucks():
     for row in csvreader:
         hash.insert(row[0], row)
     all_packages = []
-    hash.update_status('1', 'mes')
 
     i = 1
     while i < 41:

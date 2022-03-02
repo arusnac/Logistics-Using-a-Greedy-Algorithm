@@ -24,6 +24,18 @@ class HashTable(object):
                 return item[1]
 
             #raise KeyError()
+    """Updates the status of the package"""
+    def update_status(self, key, message):
+        i = self.create_hash(key)
+        for item in self.array[i]:
+            if item[0] == key:
+                self.array[i][0][1][7] = message
+    """Returns package status"""
+    def get_status(self, key):
+        i = self.create_hash(key)
+        for item in self.array[i]:
+            if item[0] == key:
+                return self.array[i][0][1][7]
 
     def insert(self, key, value):
         i = self.create_hash(key)
