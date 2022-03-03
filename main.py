@@ -1,210 +1,92 @@
-import algo
-import algorithm
-import hashtable
-import csv
-
+import datetime
 import truck
-from algorithm import greedy
-from nodes import Weighted_Graph
-from weighted_graph import Graph
 
-truck.prep_trucks()
+truck.prep_trucks(7, 0, 0, 18, 50, 0)
 
-hashtable.HashTable
-
-hash = hashtable.HashTable()
-
-file = open('packages.csv')
-
-csvreader = csv.reader(file)
-
-next(csvreader, None)
-rows = []
-
-for row in csvreader:
-    hash.insert(row[0], row)
-test_route = []
+user_input = 0
+lookup = 0
 i = 1
 
+user_input = input(
+    "(1) Look up package by id (2) Look up package by time (3) Look at packages by interval (4) Get total mileage (0) to exit ")
 
-while i < 18:
-    index = str(i)
-    address = hash.get_by_key(index)
-    address = address[1] + " (" + address[4] + ")"
-    test_route.append(address)
-    i += 1
+"""Search by package ID"""
+if user_input == '1':
 
-test_route.append('HUB')
+    while lookup != '0':
+        lookup = input("Enter package ID: (0 to exit)")
+        print(truck.package_table.get_by_key(lookup))
 
-new_file = open('distance_table.csv')
+"""Check all packages by time"""
+if user_input == '2':
+    input_time_hours = int(input('\nEnter any time after 8:00 am in military time Hours = : \n'))
+    input_time_minutes = int(input('\nMinutes: \n'))
 
-reader = csv.reader(new_file)
-header = []
-header = next(reader)
+    compare_time = datetime.timedelta(hours=10, minutes=20)
+    compare_time_input = datetime.timedelta(hours=input_time_hours, minutes=input_time_minutes)
 
-new_rows = []
+    if compare_time_input > compare_time:
+        update_input = input("\nAddress must be updated for package ID: 9. Update now? (1)\n")
+        if update_input == '1':
+            truck.truck_3.route.remove('300 State St (84103)')
+            truck.truck_3.route.append('410 S State St (84111)')
+            truck.fix_address('9')
+            truck.truck_3.set_flag(True)
 
-for row in reader:
-    new_rows.append(row)
-    n = 10
-
-    nList = []
-    i = 0
-
-    tHeader = tuple(header)
-    nRow = tuple(new_rows)
-
-    i = 0
-while i < len(nRow):
-    items = []
-    item = new_rows
-    nList.append(item[i][1])
-    i += 1
-
-nodes = []
-
-for i in nList:
-    nodes.append(i)
+    packages4 = []
+    truck.prep_trucks(8, 0, 0, input_time_hours, input_time_minutes, 0)
+    print(truck.truck_3.route)
+    i = 1
+    while i < 41:
+        index = str(i)
+        packages4.append(truck.package_table.get_by_key(index))
+        i += 1
+    print(truck.truck_3.route)
+    print(*packages4, sep='\n')
 
 
+"""Check packages in intervals of time"""
+if user_input == '3':
+    print("\n*********Interval 8:35 am - 9:25 am********* \n")
+    packages = []
+    truck.prep_trucks(8, 35, 0, 9, 25, 0)
+    while i < 41:
+        index = str(i)
+        packages.append(truck.package_table.get_by_key(index))
+        i += 1
+    print(*packages, sep='\n')
 
-start = {}
+    update_input = input("\nAddress must be updated for package ID: 9. Update now? (1)\n")
+    if update_input == '1':
+        truck.truck_3.remove('300 State St (84103)')
+        truck.truck_3.route.append('410 S State St (84111)')
+        truck.fix_address('9')
+        truck.truck_3.set_flag(True)
 
-for node in nodes:
-    start[node] = {}
+    next_input = input("\nProceed to next interval? (1)\n")
 
+    if next_input == '1':
 
-g = Weighted_Graph()
+        print("\n*********Interval 9:35 am - 10:25 am********* \n")
+        packages2 = []
+        truck.prep_trucks(9, 35, 0, 10, 25, 0)
+        i = 1
+        while i < 41:
+            index = str(i)
+            packages2.append(truck.package_table.get_by_key(index))
+            i += 1
+        print(*packages2, sep='\n')
 
-for n in nRow:
-    g.add_node(n[1])
+        print("\n*********Interval 12:03 pm - 13:12 pm********* \n")
+        packages3 = []
+        truck.prep_trucks(12, 3, 0, 13, 12, 0)
+        i = 1
+        while i < 41:
+            index = str(i)
+            packages3.append(truck.package_table.get_by_key(index))
+            i += 1
+        print(*packages3, sep='\n')
 
-n = 0
-s = 2
-while n < len(nRow):
-    g.add_edge(nRow[0][1], nRow[n][1], nRow[n][2])
-    g.add_edge(nRow[1][1], nRow[n][1], nRow[n][3])
-    g.add_edge(nRow[2][1], nRow[n][1], nRow[n][4])
-    g.add_edge(nRow[3][1], nRow[n][1], nRow[n][5])
-    g.add_edge(nRow[4][1], nRow[n][1], nRow[n][6])
-    g.add_edge(nRow[5][1], nRow[n][1], nRow[n][7])
-    g.add_edge(nRow[6][1], nRow[n][1], nRow[n][8])
-    g.add_edge(nRow[7][1], nRow[n][1], nRow[n][9])
-    g.add_edge(nRow[8][1], nRow[n][1], nRow[n][10])
-    g.add_edge(nRow[9][1], nRow[n][1], nRow[n][11])
-    g.add_edge(nRow[10][1], nRow[n][1], nRow[n][12])
-    g.add_edge(nRow[11][1], nRow[n][1], nRow[n][13])
-    g.add_edge(nRow[12][1], nRow[n][1], nRow[n][14])
-    g.add_edge(nRow[13][1], nRow[n][1], nRow[n][15])
-    g.add_edge(nRow[14][1], nRow[n][1], nRow[n][16])
-    g.add_edge(nRow[15][1], nRow[n][1], nRow[n][17])
-    g.add_edge(nRow[16][1], nRow[n][1], nRow[n][18])
-    g.add_edge(nRow[17][1], nRow[n][1], nRow[n][19])
-    g.add_edge(nRow[18][1], nRow[n][1], nRow[n][20])
-    g.add_edge(nRow[19][1], nRow[n][1], nRow[n][21])
-    g.add_edge(nRow[20][1], nRow[n][1], nRow[n][22])
-    g.add_edge(nRow[21][1], nRow[n][1], nRow[n][23])
-    g.add_edge(nRow[22][1], nRow[n][1], nRow[n][24])
-    g.add_edge(nRow[23][1], nRow[n][1], nRow[n][25])
-    g.add_edge(nRow[24][1], nRow[n][1], nRow[n][26])
-    g.add_edge(nRow[25][1], nRow[n][1], nRow[n][27])
-    g.add_edge(nRow[26][1], nRow[n][1], nRow[n][28])
+if user_input == '4':
+    print(truck.get_total_mileage(truck.truck_1.get_miles(), truck.truck_2.get_miles(), truck.truck_3.get_miles()))
 
-    n+=1
-
-
-"""
-for v in g:
-    print(v.get_id(), g.vert_dict[v.get_id()])
-"""
-test_dict = {}
-
-r = Weighted_Graph()
-
-for n in test_route:
-    r.add_node(n)
-
-
-n = 0
-while n < len(test_route):
-    for i in test_route:
-        if i is not test_route[n]:
-            r.add_edge(test_route[n], i, g.get_node(test_route[n]).get_weight(g.get_node(i)))
-        #r.add_edge(test_route[i], test_route[i+1], g.get_vertex(test_route[i]).get_weight(g.get_vertex(test_route[i+1])))
-    n+=1
-
-"""
-for v in r:
-    for w in v.get_neighbors():
-        vid = v.get_id()
-        wid = w.get_id()
-        print(vid, wid, v.get_weight(w))
-"""
-"""
-print(r.get_node(test_route[0]))
-print(r.get_weight_by_v(test_route[0], test_route[1]))
-"""
-#print(r.get_node(test_route[0]))
-#print(test_route)
-#prev, route = greedy(r)
-#print(route)
-#algorithm.print_result(prev, route, start_node = 'HUB', target_node='3060 Lester St (84119)')
-
-n = 0
-while n < len(nodes):
-    start[nRow[0][1]][nRow[n][1]] = nRow[n][2]
-    start[nRow[1][1]][nRow[n][1]] = nRow[n][3]
-    start[nRow[2][1]][nRow[n][1]] = nRow[n][4]
-    start[nRow[3][1]][nRow[n][1]] = nRow[n][5]
-    start[nRow[4][1]][nRow[n][1]] = nRow[n][6]
-    start[nRow[5][1]][nRow[n][1]] = nRow[n][7]
-    start[nRow[6][1]][nRow[n][1]] = nRow[n][8]
-    start[nRow[7][1]][nRow[n][1]] = nRow[n][9]
-    start[nRow[8][1]][nRow[n][1]] = nRow[n][10]
-    start[nRow[9][1]][nRow[n][1]] = nRow[n][11]
-    start[nRow[10][1]][nRow[n][1]] = nRow[n][12]
-    start[nRow[11][1]][nRow[n][1]] = nRow[n][13]
-    start[nRow[12][1]][nRow[n][1]] = nRow[n][14]
-    start[nRow[13][1]][nRow[n][1]] = nRow[n][15]
-    start[nRow[14][1]][nRow[n][1]] = nRow[n][16]
-    start[nRow[15][1]][nRow[n][1]] = nRow[n][17]
-    start[nRow[16][1]][nRow[n][1]] = nRow[n][18]
-    start[nRow[17][1]][nRow[n][1]] = nRow[n][19]
-    start[nRow[18][1]][nRow[n][1]] = nRow[n][20]
-    start[nRow[19][1]][nRow[n][1]] = nRow[n][21]
-    start[nRow[20][1]][nRow[n][1]] = nRow[n][22]
-    start[nRow[21][1]][nRow[n][1]] = nRow[n][23]
-    start[nRow[22][1]][nRow[n][1]] = nRow[n][24]
-    start[nRow[23][1]][nRow[n][1]] = nRow[n][25]
-    start[nRow[24][1]][nRow[n][1]] = nRow[n][26]
-    start[nRow[25][1]][nRow[n][1]] = nRow[n][27]
-    start[nRow[26][1]][nRow[n][1]] = nRow[n][28]
-
-    n += 1
-
-
-# start["test3"]["test4"] = nRow[1][2]
-# start[tHeader[3]][nRow[1][1]] = nRow[1][2]
-# start[tHeader[4], nRow[2][1]] = nRow[2][2]
-# start[tHeader[5], nRow[3][1]] = nRow[3][2]
-# print(start)
-newGraph = Graph(nodes, start)
-newStart = {}
-#newStart[nRow[1][0]][nRow[n][1]] = nRow[n][28]
-
-
-# print(newGraph.value(nRow[15][0], nRow[10][0]))
-# print(nRow[15][0])
-# print(newGraph.value(nRow[15][0], nRow[25][0]))
-end = test_route[8]
-#prev, route = algo.dijkstra_algorithm(newGraph, test_route, start_node=nRow[0][1])
-# algo.print_result(prev, route, start_node=nRow[0][1], target_node=test_route[-2])
-#print(prev)
-#algo.print_result(prev, route, start_node=nRow[0][1], target_node=end)
-# print(newGraph.get_edges(nRow[0][0]))
-# newGraph.create_graph()
-
-
-# print(edges)
-# print('origin= ', header[2], 'location= ', new_rows[0][1], 'distance= ', new_rows[0][2])
-# print(new_rows)

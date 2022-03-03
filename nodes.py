@@ -1,7 +1,5 @@
 import csv
-
 import algorithm
-import testalgo
 
 
 class Weighted_Graph:
@@ -49,8 +47,6 @@ class Nodes:
         self.visited = False
         self.previous = None
 
-    # def __str__(self):
-    # return str(self.id) + ' adjacent: ' + str([x.id for x in self.adjacent])
     def get_id(self):
         return self.node_id
 
@@ -131,7 +127,7 @@ def load_graph(to_sort):
 
     r = Weighted_Graph()
     to_sort.insert(0, 'HUB')
-    #print(to_sort)
+
     for n in to_sort:
         r.add_node(n)
 
@@ -141,25 +137,8 @@ def load_graph(to_sort):
         for i in to_sort:
             if i is not to_sort[n]:
                 r.add_edge(to_sort[n], i, g.get_node(to_sort[n]).get_weight(g.get_node(i)))
-                #print("1 = " + to_sort[n] + "2 = " + i + "3 = " + str(g.get_node(to_sort[n]).get_weight(g.get_node(i))))
         n += 1
 
     dist = algorithm.greedy(r)
 
     return dist
-"""
-    r = Weighted_Graph()
-
-    for n in test_route:
-        r.add_node(n)
-
-    n = 0
-    while n < len(test_route):
-        for i in test_route:
-            if i is not test_route[n]:
-                r.add_edge(test_route[n], i, g.get_node(test_route[n]).get_weight(g.get_node(i)))
-            # r.add_edge(test_route[i], test_route[i+1], g.get_vertex(test_route[i]).get_weight(g.get_vertex(test_route[i+1])))
-        n += 1
-
-    algorithm.greedy(r)
-"""

@@ -1,5 +1,5 @@
 class HashTable(object):
-    def __init__(self, size=80):
+    def __init__(self, size=3280):
         self.array = [None] * size
 
     def create_hash(self, key):
@@ -8,7 +8,8 @@ class HashTable(object):
 
     def print_items(self):
         for i in self.array:
-            print(i)
+            if i is not None:
+                print(i)
 
     def get_all_items(self):
         for item in self.array:
@@ -16,20 +17,27 @@ class HashTable(object):
 
     def get_by_key(self, key):
         index = self.create_hash(key)
-        #if self.array[index] is None:
-            #raise KeyError()
-        #else:
         for item in self.array[index]:
             if item[0] == key:
                 return item[1]
 
-            #raise KeyError()
     """Updates the status of the package"""
-    def update_status(self, key, message):
+    def update_status(self, key, message, time):
         i = self.create_hash(key)
         for item in self.array[i]:
             if item[0] == key:
                 self.array[i][0][1][7] = message
+                self.array[i][0][1][8] = time
+                break
+
+    def update_address(self, key, address, zip):
+        i = self.create_hash(key)
+        for item in self.array[i]:
+            if item[0] == key:
+                self.array[i][0][1][1] = address
+                self.array[i][0][1][4] = zip
+
+
     """Returns package status"""
     def get_status(self, key):
         i = self.create_hash(key)
@@ -61,12 +69,5 @@ class HashTable(object):
 
         if items > len(self.array)/2:
             size = 120
-
-
-    #def __setitem__(self, key, value):
-        #self.add(key, value)
-
-    #def __getitem__(self, key):
-        #return self.get(key)
 
 
