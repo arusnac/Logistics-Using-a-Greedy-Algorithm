@@ -7,12 +7,13 @@ class Weighted_Graph:
         self.size = 0
         self.nodes = {}
 
-    """Get weight by passed in vertices"""
+    # Get weight by passed in vertices
     def get_weight_by_v(self, node1, node2):
         if node1 and node2 in self.nodes:
             return self.nodes[node1].get_weight(self.nodes[node2])
 
-    def add_edge(self, source, dest, distance = 0):
+    # Add edge from the source node to the destination node
+    def add_edge(self, source, dest, distance=0):
         if source not in self.nodes:
             self.add_node(source)
         if dest not in self.nodes:
@@ -21,21 +22,25 @@ class Weighted_Graph:
         self.nodes[source].add_adjacent(self.nodes[dest], distance)
         self.nodes[dest].add_adjacent(self.nodes[source], distance)
 
+    # Add nodes to the graph
     def add_node(self, node):
         self.size = self.size + 1
         new_vertex = Nodes(node)
         self.nodes[node] = new_vertex
         return new_vertex
 
+    # Return all nodes
     def get_nodes(self):
         return self.nodes.keys()
 
+    # Return single node
     def get_node(self, node):
         if node in self.nodes:
             return self.nodes[node]
         else:
-            return "vertex not found"
+            print("Node not found")
 
+    # Make the nodes iterable
     def __iter__(self):
         return iter(self.nodes.values())
 
@@ -47,27 +52,37 @@ class Nodes:
         self.visited = False
         self.previous = None
 
+    # Get node ID
     def get_id(self):
         return self.node_id
 
+    # Get weight between neighbor node
     def get_weight(self, neighbor):
         return float(self.adjacent[neighbor])
 
+    # Add an adjacent node
     def add_adjacent(self, neighbor, weight=0):
         self.adjacent[neighbor] = weight
 
+    # Return adjacent nodes
     def get_adjacent(self):
         return self.adjacent.keys()
 
+    # Set previously visited node
     def set_previous(self, prev):
         self.previous = prev
+
+    # get previously visited node
     def get_previous(self):
         return self.previous
 
+    # Set node as visited
     def set_visited(self):
         self.visited = True
 
+
 def load_graph(to_sort):
+    # Open and read the distance table
     new_file = open('distance_table.csv')
 
     reader = csv.reader(new_file)
@@ -75,24 +90,18 @@ def load_graph(to_sort):
     header = next(reader)
 
     new_rows = []
-
     for row in reader:
         new_rows.append(row)
-        n = 10
-
-        nList = []
-        i = 0
-
-        tHeader = tuple(header)
         nRow = tuple(new_rows)
 
     g = Weighted_Graph()
 
+    # Use the distance file to create a node out of every address
     for n in nRow:
         g.add_node(n[1])
 
     n = 0
-    s = 2
+    # Add all data from the distances file to the graph in order to be able to associate each address with another
     while n < len(nRow):
         g.add_edge(nRow[0][1], nRow[n][1], nRow[n][2])
         g.add_edge(nRow[1][1], nRow[n][1], nRow[n][3])
@@ -124,21 +133,21 @@ def load_graph(to_sort):
 
         n += 1
 
-
     r = Weighted_Graph()
     to_sort.insert(0, 'HUB')
 
     for n in to_sort:
         r.add_node(n)
 
-
     n = 0
+    # Associate the truck routes with the vertices and edges
     while n < len(to_sort):
         for i in to_sort:
             if i is not to_sort[n]:
                 r.add_edge(to_sort[n], i, g.get_node(to_sort[n]).get_weight(g.get_node(i)))
         n += 1
 
+    # Run the routes through the algorithm
     dist = algorithm.greedy(r)
 
     return dist

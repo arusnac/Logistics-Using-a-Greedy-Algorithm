@@ -1,6 +1,7 @@
 class HashTable(object):
     def __init__(self, size=3280):
         self.array = [None] * size
+        self.size = size
 
     def create_hash(self, key):
         length = len(self.array)
@@ -61,13 +62,13 @@ class HashTable(object):
         self.is_full()
 
     def is_full(self):
-        items = 0
+        num = 0
 
-        for item in self.array:
-            if item is not None:
-                items += 1
+        for i in self.array:
+            if i is not None:
+                num += 1
 
-        if items > len(self.array)/2:
-            size = 120
+        if num == len(self.array):
+            self.size *= 2
 
 

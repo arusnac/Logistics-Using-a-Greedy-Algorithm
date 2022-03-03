@@ -24,12 +24,6 @@ class Truck:
     def remove(self, package):
         self.route.remove(package)
 
-    def set_id(self, truck_id):
-        self.id = truck_id
-
-    def get_id(self):
-        return self.id
-
     def get_total_mileage(self):
         return self.total
 
@@ -70,6 +64,7 @@ class Truck:
     def get_miles(self):
         return self.miles
 
+    # Flag for when packed #9 needs to be updated
     def set_flag(self, flag):
         self.flag = flag
 
@@ -86,8 +81,9 @@ def prep_trucks(sh, sm, ss, eh, em, es):
     truck3pkg = []
 
     restrict_start = timedelta(hours=sh, minutes=sm, seconds=ss)
-
     restrict_end = timedelta(hours=eh, minutes=em, seconds=es)
+
+    # Open and read the package data
     file = open('packages.csv')
     csvreader = csv.reader(file)
 
@@ -97,16 +93,17 @@ def prep_trucks(sh, sm, ss, eh, em, es):
     for row in csvreader:
         update_packages.append(row)
 
+    # Add additional space for a status for packages
     for i in update_packages:
         i.append('')
 
     all_packages = []
 
-    """Insert packages into the hashtable"""
+    # Insert packages into the hashtable
     for i in update_packages:
         package_table.insert(i[0], i)
 
-    """Get a list of all packages so they can be sorted onto the trucks"""
+    # Get a list of all packages so they can be sorted onto the trucks
     i = 1
     while i < 41:
         index = str(i)
@@ -119,13 +116,14 @@ def prep_trucks(sh, sm, ss, eh, em, es):
 
     ref_packages = []
     i = 1
+    # Use for reference for keys in package_table
     while i < 41:
         index = str(i)
         package = package_table.get_by_key(index)
         ref_packages.append(package)
         i += 1
 
-    """Sort all packages into specified trucks"""
+    # Sort all packages into specified trucks
     for pkg in all_packages:
         if pkg[7] == "Can only be on truck 2":
             truck2pkg.append(pkg)
@@ -154,6 +152,7 @@ def prep_trucks(sh, sm, ss, eh, em, es):
             all_packages.remove(pkg)
 
     i = 0
+    # Allocate according to space left on each truck
     while i < 8:
         truck2pkg.append(all_packages[i])
         all_packages.remove(all_packages[i])
@@ -168,9 +167,9 @@ def prep_trucks(sh, sm, ss, eh, em, es):
     for p in all_packages:
         truck3pkg.append(p)
 
-    """Set packages to instance of each truck, run through greedy algorithm to get the route"""
-    """Run through the function to calculate time. Set mileage, start time, end time, current time to all instances 
-    of truck """
+    # Set packages to instance of each truck, run through greedy algorithm to get the route
+    # Run through the function to calculate time. Set mileage, start time, end time, current time to all instances
+    # of truck
     truck_1.set_packages(truck1pkg)
     truck_2.set_packages(truck2pkg)
     truck_3.set_packages(truck3pkg)
@@ -178,6 +177,7 @@ def prep_trucks(sh, sm, ss, eh, em, es):
     truck_2.set_start(timedelta(hours=9, minutes=5))
     truck_1.set_start(timedelta(hours=8, minutes=0))
 
+    # Restrict updates to packages to fall in with the time passed in
     if restrict_end < truck_1.get_start():
         for p in ref_packages:
             if p[7] != "Delayed on flight---will not arrive to depot until 9:05 am":
@@ -204,7 +204,6 @@ def prep_trucks(sh, sm, ss, eh, em, es):
 
     if restrict_end > truck_1.get_start():
         mileage, end_time = calculate_time(returned_route, dist, truck_1.get_start(), 1, restrict_start, restrict_end)
-
         truck_1.set_end(end_time)
         truck_1.set_miles(mileage)
 
@@ -213,11 +212,12 @@ def prep_trucks(sh, sm, ss, eh, em, es):
 
     if restrict_end > truck_2.get_start():
         mileage, end_time = calculate_time(returned_route, dist, truck_2.get_start(), 2, restrict_start, restrict_end)
-
         truck_2.set_end(end_time)
         truck_2.set_miles(mileage)
+
     if truck_2.get_end() is not None:
         format_truck_3 = format(truck_3.get_packages())
+
     truck_3.set_route(format_truck_3)
     dist, returned_route = nodes.load_graph(to_sort=format_truck_3)
     truck_3.set_miles(dist)
@@ -228,7 +228,6 @@ def prep_trucks(sh, sm, ss, eh, em, es):
         if restrict_end > truck_3.get_start():
             mileage, end_time = calculate_time(returned_route, dist, truck_3.get_start(), 3, restrict_start,
                                                restrict_end)
-
             truck_3.set_end(end_time)
             truck_3.set_miles(mileage)
 
@@ -237,16 +236,12 @@ def fix_address(address):
     package_table.update_address(address, '410 S State St', '84111')
 
 
-"""returns total mileage"""
-
-
+# returns total mileage
 def get_total_mileage(m1, m2, m3):
     return m1 + m2 + m3
 
 
-"""Takes in the route, start time, distances and truck id. Calculates mileage and time"""
-
-
+# Takes in the route, start time, distances and truck id. Calculates mileage and time
 def calculate_time(returned_route, distances, start_time, truck_id, restricted_start, restricted_end):
     current_time = start_time
     total_mileage = 0
@@ -270,6 +265,7 @@ def calculate_time(returned_route, distances, start_time, truck_id, restricted_s
     return total_mileage, end_time
 
 
+# Update status to be out for delivery
 def set_out_for_delivery(truck_id, status, current_time):
     if truck_id == 1:
         for p in truck_1.get_packages():
@@ -284,6 +280,7 @@ def set_out_for_delivery(truck_id, status, current_time):
             package_table.update_status(p[0], 'Out For Delivery', str(current_time))
 
 
+# Update status to be delivered
 def update_package(package, truck_id, current_time):
     if truck_id == 1:
         for p in truck_1.get_packages():
@@ -301,6 +298,7 @@ def update_package(package, truck_id, current_time):
                 package_table.update_status(p[0], 'Delivered', current_time)
 
 
+# Format the route so that it can be associated with distances from the distance file
 def format(packages):
     format_for_graph = []
     i = 0
