@@ -12,16 +12,6 @@ class Weighted_Graph:
         if node1 and node2 in self.nodes:
             return self.nodes[node1].get_weight(self.nodes[node2])
 
-    # Add edge from the source node to the destination node
-    def add_edge(self, source, dest, distance=0):
-        if source not in self.nodes:
-            self.add_node(source)
-        if dest not in self.nodes:
-            self.add_node(dest)
-
-        self.nodes[source].add_adjacent(self.nodes[dest], distance)
-        self.nodes[dest].add_adjacent(self.nodes[source], distance)
-
     # Add nodes to the graph
     def add_node(self, node):
         self.size = self.size + 1
@@ -32,6 +22,16 @@ class Weighted_Graph:
     # Return all nodes
     def get_nodes(self):
         return self.nodes.keys()
+
+        # Add edge from the source node to the destination node
+    def add_edge(self, source, dest, distance=0):
+        if source not in self.nodes:
+            self.add_node(source)
+        if dest not in self.nodes:
+            self.add_node(dest)
+
+        self.nodes[source].add_adjacent(self.nodes[dest], distance)
+        self.nodes[dest].add_adjacent(self.nodes[source], distance)
 
     # Return single node
     def get_node(self, node):
